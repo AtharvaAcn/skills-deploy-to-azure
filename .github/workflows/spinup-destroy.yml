@@ -38,6 +38,12 @@ jobs:
         run: |
           az appservice plan create --resource-group ${{env.AZURE_RESOURCE_GROUP}} --name ${{env.AZURE_APP_PLAN}} --is-linux --sku F1 --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
 
+      - name: Wait for App Service plan to be available
+        if: success()
+        run: |
+          az appservice plan wait --created --resource-group ${{env.AZURE_RESOURCE_GROUP}} --name ${{env.AZURE_APP_PLAN}}
+
+
       - name: Create webapp resource
         if: success()
         run: |
